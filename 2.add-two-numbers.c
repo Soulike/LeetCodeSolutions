@@ -1,3 +1,34 @@
+/*
+ * @lc app=leetcode id=2 lang=c
+ *
+ * [2] Add Two Numbers
+ *
+ * https://leetcode.com/problems/add-two-numbers/description/
+ *
+ * algorithms
+ * Medium (31.15%)
+ * Likes:    5220
+ * Dislikes: 1344
+ * Total Accepted:    882.2K
+ * Total Submissions: 2.8M
+ * Testcase Example:  '[2,4,3]\n[5,6,4]'
+ *
+ * You are given two non-empty linked lists representing two non-negative
+ * integers. The digits are stored in reverse order and each of their nodes
+ * contain a single digit. Add the two numbers and return it as a linked list.
+ * 
+ * You may assume the two numbers do not contain any leading zero, except the
+ * number 0 itself.
+ * 
+ * Example:
+ * 
+ * 
+ * Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+ * Output: 7 -> 0 -> 8
+ * Explanation: 342 + 465 = 807.
+ * 
+ * 
+ */
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -8,11 +39,12 @@
 
 #include <stdlib.h>
 
-struct ListNode
-{
-    int val;
-    struct ListNode *next;
-};
+// 在提交时需要注释这个结构体
+// struct ListNode
+// {
+//     int val;
+//     struct ListNode *next;
+// };
 
 struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
 {
@@ -35,7 +67,7 @@ struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
         }
         else
         {
-            lastNode->next = newNode;   
+            lastNode->next = newNode;
         }
         lastNode = newNode;
 
@@ -65,11 +97,10 @@ struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
         {
             needPlusOne = 0;
         }
-        
     }
 
     // 运算结束了还存在进位，需要单独处理
-    if(needPlusOne == 1)
+    if (needPlusOne == 1)
     {
         newNode = (struct ListNode *)malloc(sizeof(struct ListNode));
         newNode->next = NULL;
@@ -78,25 +109,4 @@ struct ListNode *addTwoNumbers(struct ListNode *l1, struct ListNode *l2)
         newNode->val = 1;
     }
     return head;
-}
-
-int main()
-{
-    struct ListNode *l1 = NULL;
-    struct ListNode *l2 = NULL;
-    l1 = malloc(sizeof(struct ListNode *));
-    l1->next = NULL;
-    l1->val = 1;
-
-    l2 = malloc(sizeof(struct ListNode *));
-    l2->next = NULL;
-    l2->val = 9;
-
-    struct ListNode *temp = malloc(sizeof(struct ListNode *));
-    temp->next = NULL;
-    temp->val = 9;
-    l2->next = temp;
-
-    struct ListNode *ret = addTwoNumbers(l1, l2);
-
 }
