@@ -51,9 +51,8 @@
  */
 
 #include <string.h>
-#include <stdbool.h>
 
-// ???????????????????????? [left, right)?????????????? NULL
+// [left, right)
 char *findInString(char *left, char *right, char c)
 {
     for (char *p = left; p < right; p++)
@@ -68,26 +67,32 @@ char *findInString(char *left, char *right, char c)
 
 int lengthOfLongestSubstring(char *s)
 {
+    if (s == NULL || *s == '\0')
+    {
+        return 0;
+    }
+
     char *left = s;
     char *right = s + 1;
     char *pos = NULL;
-    while (*right != '\0') // ????? \0??????????
+    int longest = 1;
+    while (*right != '\0')
     {
+        longest = longest > right - left ? longest : right - left;
         pos = findInString(left, right, *right);
-        if(pos == NULL)
+        if (pos == NULL)
         {
-            
+            right++;
         }
         else
         {
-            
+            left = pos + 1;
+            right = left + 1;
         }
-        
     }
-    return right - left;
-}
-
-int main()
-{
-    lengthOfLongestSubstring("abcabcbb");
+    if (*right == '\0')
+    {
+        longest = longest > right - left ? longest : right - left;
+    }
+    return longest;
 }
