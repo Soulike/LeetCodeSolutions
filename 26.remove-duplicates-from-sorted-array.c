@@ -35,9 +35,9 @@
  * Given nums = [0,0,1,1,1,2,2,3,3,4],
  * 
  * Your function should return length = 5, with the first five elements of nums
- * being modified to 0, 1, 2, 3, and 4 respectively.
+ * being modified toÂ 0, 1, 2, 3, andÂ 4 respectively.
  * 
- * It doesn't matter what values are set beyond the returned length.
+ * It doesn't matter what values are set beyondÂ the returned length.
  * 
  * 
  * Clarification:
@@ -61,50 +61,21 @@
  * }
  * 
  */
-#include <stdbool.h>
-#include <string.h>
-
 int removeDuplicates(int *nums, int numsSize)
 {
-    if (numsSize == 0 || numsSize == 1)
+    if (numsSize <= 1)
     {
         return numsSize;
     }
 
-    int index = 0;
-    int currentNum = 0;
-    while (true)
+    int j = 0;
+    for (int i = 1; i < numsSize; i++)
     {
-        currentNum = nums[index];
-        if (index != numsSize - 1 && nums[index + 1] == currentNum)
+        if (nums[i] > nums[j])
         {
-            for (int i = index; i < numsSize - 1; i++)
-            {
-                if (nums[i + 1] != currentNum)
-                {
-                    memmove(nums + index + 1, nums + i + 1, (numsSize - i - 1) * sizeof(int));
-                    numsSize -= i - index;
-                    break;
-                }
-
-                if (i + 1 == numsSize - 1)
-                {
-                    numsSize = index + 1;
-                    break;
-                }
-            }
-        }
-        index++;
-
-        if (index == numsSize)
-        {
-            return index;
+            nums[j + 1] = nums[i];
+            j++;
         }
     }
+    return j + 1;
 }
-
-// int main()
-// {
-//     int arr[] = {1, 2,2};
-//     removeDuplicates(arr, 3);
-// }
