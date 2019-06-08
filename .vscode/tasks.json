@@ -12,16 +12,6 @@
                 "-o",
                 "build/${fileBasenameNoExtension}.out"
             ],
-            "windows": {
-                "command": "g++",
-                "args": [
-                    "*.c",
-                    "-Wall",
-                    "-g",
-                    "-o",
-                    "build/${fileBasenameNoExtension}.exe"
-                ],
-            },
             "options": {
                 "cwd": "${fileDirname}"
             },
@@ -43,9 +33,6 @@
             "type": "process",
             "dependsOn": "build",
             "command": "build/${fileBasenameNoExtension}.out",
-            "windows": {
-                "command": "build/${fileBasenameNoExtension}.exe",
-            },
             "options": {
                 "cwd": "${fileDirname}"
             },
