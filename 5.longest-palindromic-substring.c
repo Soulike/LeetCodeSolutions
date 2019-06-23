@@ -59,23 +59,19 @@ bool isPalindrome(char *s, int left, int right)
 char *longestPalindrome(char *s)
 {
     int len = strlen(s);
-    int longestLen = 0;
     char *ret = (char *)malloc(sizeof(char));
     ret[0] = '\0';
-    for (int i = 0; i < len; i++)
+    for (int i = len; i > 0; i--)
     {
-        for (int j = len; j > 0; j--)
+        for (int j = 0; j + i <= len; j++)
         {
-            if (isPalindrome(s, i, j))
+            if (isPalindrome(s, j, j + i))
             {
-                if (j - i > longestLen)
-                {
-                    longestLen = j - i;
-                    free(ret);
-                    ret = (char *)malloc((j - i + 1) * sizeof(char));
-                    memcpy(ret, s + i, (j - i) * sizeof(char));
-                    ret[j - i] = '\0';
-                }
+                free(ret);
+                ret = (char *)malloc((i + 1) * sizeof(char));
+                memcpy(ret, s + j, i * sizeof(char));
+                ret[i] = '\0';
+                return ret;
             }
         }
     }
