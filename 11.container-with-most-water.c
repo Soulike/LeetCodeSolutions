@@ -39,34 +39,53 @@
  * 
  */
 
+#include <stdbool.h>
+
+inline int min(int a, int b)
+{
+    return a < b ? a : b;
+}
+
 int maxArea(int *height, int heightSize)
 {
-    int maxVolume = 0;
-    int currentVolume = 0;
-    int currentHeight = 0;
-    int comparingHeight = 0;
+    int *left = &height[0];
+    int *right = &height[heightSize - 1];
 
-    for (int i = 0; i < heightSize; i++)
+    int prevLeftHeight = 0;
+    int prevRightHeight = 0;
+
+    int maxArea = 0;
+    int currentArea = 0;
+
+    while (right > left)
     {
-        currentHeight = height[i];
-        for (int j = i + 1; j < heightSize; j++)
+        currentArea = min(*left, *right) * (right - left);
+        if (currentArea > maxArea)
         {
-            comparingHeight = height[j];
-            if (comparingHeight >= currentHeight)
-            {
-                currentVolume = (j - i) * currentHeight;
-            }
-            else
-            {
-                currentVolume = (j - i) * comparingHeight;
-            }
+            maxArea = currentArea;
+        }
 
-            if (currentVolume > maxVolume)
+        if (*left > *right)
+        {
+            prevRightHeight = *right;
+            right--;
+            while (left < right && *right <= prevRightHeight)
             {
-                maxVolume = currentVolume;
+                prevRightHeight = *right;
+                right--;
+            }
+        }
+        else
+        {
+            prevLeftHeight = *left;
+            left++;
+            while (left < right && *left <= prevLeftHeight)
+            {
+                prevLeftHeight = *left;
+                left++;
             }
         }
     }
 
-    return maxVolume;
+    return maxArea;
 }
