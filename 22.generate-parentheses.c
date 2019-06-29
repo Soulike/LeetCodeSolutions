@@ -30,13 +30,6 @@
  * ⁠ "()()()"
  * ]
  * 
- * [
- * ⁠ "(())",
- * ⁠ "()()",
- * ⁠ "())(",
- * ⁠ ")(()",
- * ⁠ ")()("
- * ]
  * 
  */
 
@@ -95,22 +88,12 @@ void popCharArray(CharArray *array)
     array->length--;
 }
 
-char *toString(CharArray *array)
+char *charArrayToString(CharArray *array)
 {
     char *ret = (char *)malloc((array->length + 1) * sizeof(char));
     memcpy(ret, array->str, array->length * sizeof(char));
     ret[array->length] = '\0';
     return ret;
-}
-
-CharArray *cloneCharArray(CharArray *array)
-{
-    CharArray *newArray = malloc(sizeof(CharArray));
-    newArray->length = array->length;
-    newArray->capacity = array->capacity;
-    newArray->str = (char *)malloc(array->capacity * sizeof(char));
-    memcpy(newArray->str, array->str, array->length * sizeof(char));
-    return newArray;
 }
 
 struct StringArray
@@ -140,7 +123,7 @@ void destroyStringArray(StringArray *array)
 void expandStringArray(StringArray *array)
 {
     char **newStrArray = (char **)malloc(2 * array->capacity * sizeof(char *));
-    memcpy(newStrArray, array->strArray, array->length * sizeof(char));
+    memcpy(newStrArray, array->strArray, array->length * sizeof(char *));
     free(array->strArray);
     array->strArray = newStrArray;
     array->capacity *= 2;
@@ -179,13 +162,17 @@ void generateRecursive(int n, CharArray *cArray, StringArray *sArray)
 
     // ( 为 -1 ) 为 1，计算累加和
     int sum = 0;
-    int leftNum = 0;
+    int leftNum = 0; // 左括号目前数量
     for (int i = 0; i < cArray->length; i++)
     {
-        sum += cArray->str[i] == '(' ? -1 : 1;
-        if(cArray->str[i] == '(')
+        if (cArray->str[i] == '(')
         {
+            sum += -1;
             leftNum++;
+        }
+        else
+        {
+            sum += 1;
         }
     }
 
@@ -195,14 +182,14 @@ void generateRecursive(int n, CharArray *cArray, StringArray *sArray)
         // 只有完全配对的返回
         if (sum == 0)
         {
-            pushStringArray(sArray, toString(cArray));
+            pushStringArray(sArray, charArrayToString(cArray));
         }
         return;
     }
 
     if (sum < 0) // 有多余的左括号
     {
-        if (leftNum < n)
+        if (leftNum < n)    // 左括号小于对数
         {
             pushCharArray(cArray, '(');
             generateRecursive(n, cArray, sArray);
@@ -213,7 +200,7 @@ void generateRecursive(int n, CharArray *cArray, StringArray *sArray)
         generateRecursive(n, cArray, sArray);
         popCharArray(cArray);
     }
-    else if (sum == 0 && leftNum < n) // 没有多余的左括号
+    else if (sum == 0) // 没有多余的左括号
     {
         pushCharArray(cArray, '(');
         generateRecursive(n, cArray, sArray);
@@ -226,13 +213,8 @@ char **generateParenthesis(int n, int *returnSize)
     StringArray *sArray = createStringArray();
     CharArray *cArray = createCharArray();
     generateRecursive(n, cArray, sArray);
+    destroyCharArray(cArray);
 
     *returnSize = sArray->length;
     return sArray->strArray;
 }
-
-// int main()
-// {
-//     int retSize = -1;
-//     generateParenthesis(10, &retSize);
-// }
