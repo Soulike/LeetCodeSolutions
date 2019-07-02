@@ -30,23 +30,39 @@
  * the divide and conquer approach, which is more subtle.
  * 
  */
-#include<stdint.h>
 
+/*
+动态规划
+f(x) 表示从 x 位置（包括 x）向前看最大子数组和
+
+f(0) = nums[0]
+f(n) = f(n-1) > 0 ? f(n-1) + nums[n] : nums[n]
+ */
 int maxSubArray(int *nums, int numsSize)
 {
-    if (numsSize == 0)
+    if (numsSize == 1)
     {
-        return 0;
+        return nums[0];
     }
 
-    int sum = 0;
-    int max = INT32_MIN;
+    int max = nums[0];
+    int last = nums[0];
 
-    for (int i = 0; i < numsSize; i++)
+    for (int i = 1; i < numsSize; i++)
     {
-        sum += nums[i];
-        max = sum > max ? sum : max;
-        sum = sum > 0 ? sum : 0;
+        if(last > 0)
+        {
+            last = last + nums[i];
+        }
+        else
+        {
+            last = nums[i];
+        }
+
+        if(max < last)
+        {
+            max = last;
+        }
     }
 
     return max;
