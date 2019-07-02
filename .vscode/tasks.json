@@ -3,9 +3,9 @@
         {
             "type": "shell",
             "label": "build",
-            "command": "clang",
+            "command": "clang++",
             "args": [
-                "${fileBasenameNoExtension}.c",
+                "${fileBasenameNoExtension}.cpp",
                 "-lm",
                 "-Wall",
                 "-g",
