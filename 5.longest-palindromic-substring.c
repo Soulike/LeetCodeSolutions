@@ -32,55 +32,61 @@
  * 
  * 
  */
-
-#include <string.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-bool isPalindrome(char *s, int left, int right)
-{
-    right--;
-    while (right > left)
-    {
-        if (s[left] == s[right])
-        {
-            left++;
-            right--;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    return true;
-}
 
 char *longestPalindrome(char *s)
 {
     int len = strlen(s);
-    char *ret = (char *)malloc(sizeof(char));
-    ret[0] = '\0';
-    for (int i = len; i > 0; i--)
+    if(len == 0)
     {
-        for (int j = 0; j + i <= len; j++)
+        return "";
+    }
+
+    if(len == 1)
+    {
+        return s;
+    }
+
+    bool(*isPalindrome)[len] = (bool(*)[len])malloc(len * len * sizeof(bool)); // 从 i 到 j 是回文
+    memset(isPalindrome, false, len * len * sizeof(bool));
+
+    int left = 0;
+    int right = 0;
+    int maxLen = 1;
+
+    for (int j = 0; j < len; j++)
+    {
+        isPalindrome[j][j] = 1;
+        for (int i = 0; i < j; i++)
         {
-            if (isPalindrome(s, j, j + i))
+            if (j == i + 1 && s[i] == s[j])
             {
-                free(ret);
-                ret = (char *)malloc((i + 1) * sizeof(char));
-                memcpy(ret, s + j, i * sizeof(char));
-                ret[i] = '\0';
-                return ret;
+                isPalindrome[i][j] = true;
+                if (j - i + 1 > maxLen)
+                {
+                    left = i;
+                    right = j;
+                    maxLen = j - i + 1;
+                }
+            }
+            else if (j > i + 1 && s[i] == s[j] && isPalindrome[i + 1][j - 1])
+            {
+                isPalindrome[i][j] = true;
+                if (j - i + 1 > maxLen)
+                {
+                    left = i;
+                    right = j;
+                    maxLen = j - i + 1;
+                }
             }
         }
     }
+
+    char *ret = malloc((maxLen + 1) * sizeof(char));
+    memcpy(ret, s + left, maxLen * sizeof(char));
+    ret[maxLen] = '\0';
     return ret;
 }
-
-// int main()
-// {
-//     char *s = "1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
-//     char *t = longestPalindrome(s);
-//     printf("%s", t);
-// }
