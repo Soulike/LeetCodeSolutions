@@ -55,6 +55,9 @@ public:
         }
 
         sort(nums.begin(), nums.end());
+        int left = 0;
+        int right = 0;
+        int sum = 0;
         for (int i = 0; i <= nums.size() - 4; i++)
         {
             if (i > 0 && nums[i] == nums[i - 1])
@@ -65,20 +68,34 @@ public:
                 if (j > i + 1 && nums[j] == nums[j - 1])
                     continue;
 
-                for (int k = j + 1; k <= nums.size() - 2; k++)
+                left = j + 1;
+                right = nums.size() - 1;
+
+                while (left < right)
                 {
-                    if (k > j + 1 && nums[k] == nums[k - 1])
-                        continue;
-
-                    for (int l = k + 1; l <= nums.size() - 1; l++)
+                    sum = nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target)
                     {
-                        if (l > k + 1 && nums[l] == nums[l - 1])
-                            continue;
+                        ret.push_back({nums[i], nums[j], nums[left], nums[right]});
 
-                        if (nums[i] + nums[j] + nums[k] + nums[l] == target)
+                        while (left < right && nums[left] == nums[left + 1])
                         {
-                            ret.push_back({nums[i], nums[j], nums[k], nums[l]});
+                            ++left;
                         }
+                        while (left < right && nums[right] == nums[right - 1])
+                        {
+                            --right;
+                        }
+                        ++left;
+                        --right;
+                    }
+                    else if (sum > target)
+                    {
+                        right--;
+                    }
+                    else
+                    {
+                        left++;
                     }
                 }
             }
